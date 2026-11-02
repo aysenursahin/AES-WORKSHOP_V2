@@ -2,7 +2,7 @@
 # 06 - Masaustu dosyalarini tum makinelerde gunceller:
 #   - komutlar.txt (GitHub'dan)
 #   - "AES Lab Rehberi" kisayolu (LabGuideUrl)
-#   - C:\Projeler icin wsuser yazma yetkisi (npm install yonetici gerektirmesin)
+#   - C:\Projeler icin aes-user yazma yetkisi (npm install yonetici gerektirmesin)
 #
 # AMI'yi yeniden almadan tum makinelere dagitmak icin kullanin.
 # Not: GitHub raw icerigi birkac dakika onbellekte kalabilir.

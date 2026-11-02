@@ -25,7 +25,7 @@ $InstanceType    = "t3.large"
 $SubnetId        = "subnet-xxxxxxxx"   # Internete cikisi olan public subnet
 $SecurityGroupId = "sg-xxxxxxxx"       # RDP (3389) sadece workshop salonunun IP'sinden
 $VolumeSizeGiB   = 60                  # Disk boyutu (GiB). AMI'deki diskten buyukse klonlarda buyutulur
-$KeyName         = ""                  # Opsiyonel; wsuser AMI'den geldigi icin sart degil
+$KeyName         = ""                  # Opsiyonel; aes-user AMI'den geldigi icin sart degil
 
 # Base makine ve AMI
 $BaseInstanceId = "i-xxxxxxxx"         # Kurulum script'inin calistigi base makine
@@ -37,7 +37,7 @@ $RoleName        = "KoiWorkshopSSMRole"
 $InstanceProfile = "KoiWorkshopSSMProfile"
 
 # Katilimcilarin RDP ile baglandigi Windows kullanicisi
-$WorkshopUser = "wsuser"
+$WorkshopUser = "aes-user"
 
 # Koi servisinin Windows'taki goruntu adi (Get-Service DisplayName).
 # Ilk makinede Koi'yi kurduktan sonra kontrol edip gerekirse duzeltin.

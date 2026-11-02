@@ -68,14 +68,14 @@ EC2 → **Launch instance**:
 **Katılımcı hesabını oluşturun** (yönetici PowerShell'de). Şifre en az 8 karakter olmalı; büyük harf, küçük harf, rakam ve özel karakter içermeli:
 
 ```powershell
-$pw = Read-Host "wsuser sifresi" -AsSecureString
-New-LocalUser -Name wsuser -Password $pw -PasswordNeverExpires
-Add-LocalGroupMember -Group Administrators -Member wsuser
+$pw = Read-Host "aes-user sifresi" -AsSecureString
+New-LocalUser -Name aes-user -Password $pw -PasswordNeverExpires
+Add-LocalGroupMember -Group Administrators -Member aes-user
 ```
 
-Administrator oturumunu kapatın ve **`wsuser` ile** tekrar bağlanın (Windows App'te makine kartı → **Edit → Credentials**).
+Administrator oturumunu kapatın ve **`aes-user` ile** tekrar bağlanın (Windows App'te makine kartı → **Edit → Credentials**).
 
-## 2. Base makineyi hazırla (`wsuser` ile)
+## 2. Base makineyi hazırla (`aes-user` ile)
 
 **Yönetici olarak açılmış PowerShell'de** (`<...>` alanlarını doldurun):
 
@@ -103,16 +103,12 @@ Sondaki kontrol listesinde her satır `[OK]` olmalı; özellikle **npm registry 
 
 **Ardından elle:**
 
-1. **Claude Desktop** ve **Cursor**'u kurun: [claude.ai/download](https://claude.ai/download), [cursor.com/download](https://cursor.com/download). Cursor için **User Setup, x64** sürümü. İkisini de `wsuser` ile kurun.
+1. **Claude Desktop** ve **Cursor**'u kurun: [claude.ai/download](https://claude.ai/download), [cursor.com/download](https://cursor.com/download). Cursor için **User Setup, x64** sürümü. İkisini de `aes-user` ile kurun.
 2. Uygulamaları (Chrome, VS Code, Cursor, Claude Desktop) bir kez açıp ilk açılış ekranlarını kapatın. Giriş ekranı çıkarsa **giriş yapmayın** (aşağıdaki uyarıya bakın).
 3. **Chrome'a 3–4 popüler extension kurun.** Lab rehberi Bölüm 2'de kullanılan **Hulu Ad Skipper | Ad Blocker [QVI]** ve **Checker Plus for Gmail**'i kurmayın.
 4. Makineyi yeniden başlatın.
 
-> **v1 base makinesini kullanıyorsanız** CA ve PAC ayarını kaldırıp AMI'yi yeniden alın (yönetici PowerShell'de, `wsuser` ile):
-> ```powershell
-> certutil -delstore Root 758A887D7DCA2EA140C561B913DA5DFB0027EA5C
-> Remove-ItemProperty "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings" -Name AutoConfigURL -ErrorAction SilentlyContinue
-> ```
+> **v1 base makinesini kullanmayın.** v1'de kullanıcı adı `wsuser` idi ve Koi Root CA ile PAC ayarı makineye kuruluydu. v2 için yeni bir base makine açıp yukarıdaki adımları `aes-user` ile uygulayın ve yeni bir AMI alın.
 
 > **Base makineye bunları KOYMAYIN.** Base makinede ne varsa AMI ile tüm katılımcı makinelerine kopyalanır:
 > - **Koi Root CA ve PAC:** Katılımcılar Bölüm 0.3'te kendileri kuracak.

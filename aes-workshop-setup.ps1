@@ -58,7 +58,10 @@ param(
     [string]$PacUrl = "",
 
     # Lab rehberinin web surumu; masaustune kisayol olarak konur.
-    [string]$LabGuideUrl = "https://aes-workshop-v2.onrender.com"
+    [string]$LabGuideUrl = "https://aes-workshop-v2.onrender.com",
+
+    # Katilimcilarin kullanacagi Windows kullanicisi; script bu kullaniciyla calistirilmali
+    [string]$WorkshopUser = "aes-user"
 )
 
 # ---------------------------------------------------------------------------
@@ -73,6 +76,27 @@ $isAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIden
 if (-not $isAdmin) {
     Write-Error "Bu script yonetici olarak calistirilmalidir."
     exit 1
+}
+
+# ---------------------------------------------------------------------------
+# On kontrol: dogru kullanici ve temiz base makine
+# ---------------------------------------------------------------------------
+if ($env:USERNAME -ne $WorkshopUser) {
+    Write-Host "HATA: Bu script '$WorkshopUser' kullanicisiyla calistirilmali (su an: $env:USERNAME)." -ForegroundColor Red
+    Write-Host "Oturumu kapatip .\$WorkshopUser ile RDP yapin ve tekrar calistirin." -ForegroundColor Red
+    exit 1
+}
+$oldUsers = @(Get-WmiObject Win32_UserAccount -Filter "LocalAccount=True" | Where-Object { $_.Name -ne $WorkshopUser -and $_.Name -match '^wsuser$' })
+if ($oldUsers.Count -gt 0) {
+    Write-Host "HATA: Bu makinede eski workshop kullanicisi var: $($oldUsers.Name -join ', ')." -ForegroundColor Red
+    Write-Host "Bu makine V1 base makinesi. Yeni bir Windows makine acip README'deki adimlari uygulayin." -ForegroundColor Red
+    exit 1
+}
+# V1'den kalmis Koi Root CA varsa kaldir (v2'de katilimcilar kendisi kuruyor)
+$oldCa = @(Get-ChildItem Cert:\LocalMachine\Root | Where-Object { $_.Subject -like "*Koi*" })
+if ($oldCa.Count -gt 0 -and -not $KoiRootCaFile) {
+    foreach ($c in $oldCa) { certutil.exe -delstore Root $c.Thumbprint | Out-Null }
+    Write-Host "Not: Makine genelindeki eski Koi Root CA kaldirildi." -ForegroundColor Yellow
 }
 
 $SetupDir    = "C:\WorkshopSetup"

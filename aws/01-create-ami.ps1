@@ -12,6 +12,30 @@ Write-Host "Base makine: $BaseInstanceId" -ForegroundColor Cyan
 Write-Host "  - aes-workshop-setup.ps1 calisti ve tum kontroller [OK] mi?"
 Write-Host "  - Claude Desktop, Cursor ve Chrome extension'lari kuruldu mu?"
 Write-Host "  - Koi bu makinede KURULU DEGIL mi?"
+# Base makineyi SSM ile kontrol et (SSM rolu yoksa kontrol atlanir)
+$baseInst = [pscustomobject]@{ Name = "base"; InstanceId = $BaseInstanceId }
+$info = Invoke-Aws @("ssm", "describe-instance-information", "--filters", "Key=InstanceIds,Values=$BaseInstanceId")
+if ($info.InstanceInformationList -and $info.InstanceInformationList[0].PingStatus -eq "Online") {
+    Write-Host "==> Base makine kontrol ediliyor..." -ForegroundColor Cyan
+    $chk = @"
+`$u = '$WorkshopUser'
+`$p = @()
+if (-not (Test-Path "C:\Users\`$u\Desktop\komutlar.txt")) { `$p += "`$u masaustunde komutlar.txt yok (kurulum `$u ile yapilmamis)" }
+if (Get-WmiObject Win32_UserAccount -Filter "LocalAccount=True AND Name='wsuser'") { `$p += "eski 'wsuser' kullanicisi var (V1 base makinesi)" }
+if (Get-ChildItem Cert:\LocalMachine\Root | Where-Object { `$_.Subject -like '*Koi*' }) { `$p += "Koi Root CA makinede kurulu (katilimcilar kendisi kuracak)" }
+if (`$p.Count) { `$p | ForEach-Object { Write-Output "SORUN: `$_" }; exit 1 }
+Write-Output "Base makine temiz"
+"@
+    $sent = Send-SsmScript -InstanceIds @($BaseInstanceId) -Script $chk -Comment "base check" -ExecutionTimeoutSeconds 120
+    $res = @(Wait-SsmCommands -Sent $sent -Instances @($baseInst) -TimeoutMinutes 5)
+    if ($res[0].Status -ne "Success") {
+        Write-Host "Base makine hazir degil, AMI alinmadi. Yukaridaki SORUN satirlarini duzeltin." -ForegroundColor Red
+        exit 1
+    }
+} else {
+    Write-Host "Not: Base makine SSM'de degil, otomatik kontrol atlandi." -ForegroundColor Yellow
+}
+
 $answer = Read-Host "Hepsi tamamsa 'evet' yazin"
 if ($answer -ne "evet") { Write-Host "Iptal edildi."; exit 1 }
 

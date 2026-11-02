@@ -58,6 +58,7 @@ EC2 → **Launch instance**:
 | Key pair | **Create new key pair** → `aes-workshop-key`, RSA, `.pem`. Dosyayı saklayın; Administrator şifresini çözmek için gerekir. |
 | Network settings → Edit | Default VPC, **Auto-assign public IP: Enable**, **Create security group** `aes-workshop-sg`, RDP kuralının **Source type: My IP** |
 | Configure storage | **60 GiB gp3** |
+| Advanced details → IAM instance profile | `KoiWorkshopSSMProfile` (yoksa önce `aws/00-create-ssm-role.ps1`). `01-create-ami.ps1` AMI almadan önce base makineyi bu sayede otomatik kontrol eder. |
 
 **Launch instance** → makine **Running** ve **2/2 checks passed** olana kadar bekleyin (5–10 dakika).
 
@@ -109,7 +110,7 @@ Sondaki kontrol listesinde her satır `[OK]` olmalı; özellikle **npm registry 
 3. **Chrome'a 3–4 popüler extension kurun.** Lab rehberi Bölüm 2'de kullanılan **Hulu Ad Skipper | Ad Blocker [QVI]** ve **Checker Plus for Gmail**'i kurmayın.
 4. Makineyi yeniden başlatın.
 
-> **v1 base makinesini kullanmayın.** v1'de kullanıcı adı `wsuser` idi ve Koi Root CA ile PAC ayarı makineye kuruluydu. v2 için yeni bir base makine açıp yukarıdaki adımları `aes-user` ile uygulayın ve yeni bir AMI alın.
+> **v1 base makinesini kullanmayın.** Kurulum script'i `wsuser` olan bir makinede ya da `aes-user` dışında bir kullanıcıyla çalıştırılırsa durur; `01-create-ami.ps1` de base makinede `wsuser`, Koi Root CA ya da eksik `aes-user` kurulumu görürse AMI almaz. v1'de kullanıcı adı `wsuser` idi ve Koi Root CA ile PAC ayarı makineye kuruluydu. v2 için yeni bir base makine açıp yukarıdaki adımları `aes-user` ile uygulayın ve yeni bir AMI alın.
 
 > **Base makineye bunları KOYMAYIN.** Base makinede ne varsa AMI ile tüm katılımcı makinelerine kopyalanır:
 > - **Koi Root CA ve PAC:** Katılımcılar Bölüm 0.3'te kendileri kuracak.

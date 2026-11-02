@@ -26,6 +26,7 @@ Akış kısaca şöyle: tek bir **base makine** kurulur, ondan **AMI** alınır,
 
 Katılımcılara dağıtılan rehber iki biçimde:
 - **Word:** [`docs/AES Workshop Lab Rehberi.docx`](docs/AES%20Workshop%20Lab%20Rehberi.docx)
+- **PDF:** [`docs/AES Workshop Lab Rehberi.pdf`](docs/AES%20Workshop%20Lab%20Rehberi.pdf)
 - **Web:** [`site/`](site/) klasörü. Yan menü, kopyalanabilir komutlar ve bölüm ilerleme takibi içerir; telefonda da çalışır.
 
 **Web sürümünü Render'da yayınlamak:** [Render](https://render.com) → **New → Blueprint** → bu repoyu bağlayın → **Apply**. Repodaki [`render.yaml`](render.yaml) statik siteyi `site/` klasöründen yayınlar; adres `https://aes-workshop-v2.onrender.com` biçiminde olur (ad doluysa Render bir ek getirir). `main` dalına her gönderimde site otomatik güncellenir.

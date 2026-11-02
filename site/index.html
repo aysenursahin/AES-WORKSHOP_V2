@@ -98,7 +98,11 @@ footer b { color: var(--green-dk); }
   col { width: auto !important; }
   th, td { padding: 7px 8px; overflow-wrap: break-word; }
 }
+.print-credit { display: none; }
 @media print {
+  @page { margin: 14mm 12mm 18mm; }
+  .print-credit { display: block; position: fixed; bottom: 0; left: 0; right: 0; text-align: center;
+    font-size: 10px; color: #5a6670; padding-top: 4px; border-top: 1px solid #e3e7ea; background: #fff; }
   aside.side, .copy, .done-toggle, .banner { display: none !important; }
   .layout { display: block; }
   .sec { break-inside: auto; }
@@ -107,6 +111,7 @@ footer b { color: var(--green-dk); }
 </style>
 </head>
 <body>
+<div class="print-credit">Cortex by Palo Alto Networks · AES Workshop · Lab Rehberi · Created by Aysenur Sahin</div>
 <img class="banner" src="assets/banner.jpg" alt="Palo Alto Networks Cortex">
 <div class="layout">
   <aside class="side" id="side">

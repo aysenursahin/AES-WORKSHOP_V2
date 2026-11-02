@@ -14,6 +14,10 @@ Get-Service | Where-Object { $_.DisplayName -like "*Koi*" }
 $ca = Get-ChildItem "$env:USERPROFILE\Downloads\*" -Include *.pem,*.crt,*.cer | Sort-Object LastWriteTime -Descending | Select-Object -First 1
 certutil -addstore -f Root $ca.FullName
 
+[Bölüm 0.3] Sertifikanın Trusted Root deposuna eklendiğini kontrol edin (aynı Terminal (Admin) penceresinde)
+$t = (New-Object System.Security.Cryptography.X509Certificates.X509Certificate2 $ca.FullName).Thumbprint
+Get-ChildItem Cert:\LocalMachine\Root | Where-Object Thumbprint -eq $t
+
 [Bölüm 0.3] Proxy doğrulama adresi (Chrome'u kapatıp açtıktan sonra)
 https://marketplace.visualstudio.com/koi
 

@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------
-# 03 - Her makinenin hostname'ini Name tag'ine gore degistirir (WS-USER01, ...)
+# 03 - Her makinenin hostname'ini Name tag'ine gore degistirir (AES-USER01, ...)
 #
 # AMI'den acilan tum makineler base makinenin adini tasir. Bu script her
 # birini kendi adina cevirir ve yeniden baslatir. Zaten dogru adda olanlara
@@ -7,7 +7,7 @@
 #
 # Kullanim:
 #   .\03-rename-hosts.ps1                      # tum makineler
-#   .\03-rename-hosts.ps1 -Only WS-USER01      # tek makine
+#   .\03-rename-hosts.ps1 -Only AES-USER01      # tek makine
 # ---------------------------------------------------------------------------
 param([string[]]$Only)
 . "$PSScriptRoot\common.ps1"

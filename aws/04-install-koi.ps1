@@ -11,7 +11,7 @@
 # hesabinizdaki private bir S3 bucket uzerinden (2 saatlik linkle) dagitilir.
 #
 # Komut SSM uzerinden SYSTEM olarak calisir. Once tek makinede deneyin:
-#   .\04-install-koi.ps1 -Only WS-USER01
+#   .\04-install-koi.ps1 -Only AES-USER01
 # Sonra hepsine:
 #   .\04-install-koi.ps1
 # Koi zaten kurulu olan makineler atlanir.

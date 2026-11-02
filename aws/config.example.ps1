@@ -14,9 +14,9 @@ $AwsProfile = ""   # CloudShell'de bos birakin; kendi PC'nizde profil adi (or. "
 # instance'lara ve AMI'lere dokunur.
 $WorkshopTag = "aes-workshop"
 
-# Katilimci makineleri: WS-USER01, WS-USER02, ...
+# Katilimci makineleri: AES-USER01, AES-USER02, ...
 # (Windows hostname'i en fazla 15 karakter olabilir.)
-$NamePrefix       = "WS-USER"
+$NamePrefix       = "AES-USER"
 $ParticipantCount = 20
 $SpareCount       = 2
 

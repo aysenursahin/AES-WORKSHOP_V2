@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------
-# 02 - AMI'den katilimci makinelerini acar (WS-USER01, WS-USER02, ...)
+# 02 - AMI'den katilimci makinelerini acar (AES-USER01, AES-USER02, ...)
 #
 # Katilimci sayisi + yedek kadar instance acar. Ayni isimde calisan bir
 # instance varsa onu atlar; yani script'i tekrar calistirmak guvenlidir.

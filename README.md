@@ -13,7 +13,7 @@ Akış kısaca şöyle: tek bir **base makine** kurulur, ondan **AMI** alınır,
 | `installers/Koi.msi` | Koi Windows kurulum paketi (v1.92.5, customer ID içermez) | `04` her makineye indirir |
 | `aws/00-create-ssm-role.ps1` | SSM için IAM rolü ve instance profile | CloudShell veya eğitmen bilgisayarı |
 | `aws/01-create-ami.ps1` | Base makineden AMI alır | CloudShell veya eğitmen bilgisayarı |
-| `aws/02-launch-instances.ps1` | AMI'den `WS-USER01`, `WS-USER02`… makinelerini açar | CloudShell veya eğitmen bilgisayarı |
+| `aws/02-launch-instances.ps1` | AMI'den `AES-USER01`, `AES-USER02`… makinelerini açar | CloudShell veya eğitmen bilgisayarı |
 | `aws/03-rename-hosts.ps1` | Her makinenin hostname'ini kendi adına çevirir | CloudShell veya eğitmen bilgisayarı |
 | `aws/04-install-koi.ps1` | Koi'yi tüm makinelere kurar | CloudShell veya eğitmen bilgisayarı |
 | `aws/05-check.ps1` | Tüm makinelerin hazır olduğunu kontrol eder | CloudShell veya eğitmen bilgisayarı |
@@ -175,14 +175,14 @@ Script önce kontrol soruları sorar. Base makine bu sırada yeniden başlar ve 
 **Önce tek makineyle pilot** (`config.ps1`'de `$ParticipantCount = 1`, `$SpareCount = 0`):
 
 ```powershell
-./02-launch-instances.ps1          # WS-USER01
+./02-launch-instances.ps1          # AES-USER01
 ./03-rename-hosts.ps1              # hostname'i değiştirir, makineyi yeniden başlatır
 ./04-install-koi.ps1               # AES'i kurar
 ```
 
 İlk makinede AES servisinin Windows'taki adını kontrol edin (`Get-Service`). `*Koi*` ile eşleşmiyorsa `config.ps1` içindeki `$KoiServicePattern`'i düzeltin.
 
-Inventory'nin konsolda dolması için birkaç saat bekleyin; extension'lar, paketler, MCP server'lar ve AI agent'lar görünmeli. Lab rehberini WS-USER01'de baştan sona bir kez uygulamak en iyi provadır.
+Inventory'nin konsolda dolması için birkaç saat bekleyin; extension'lar, paketler, MCP server'lar ve AI agent'lar görünmeli. Lab rehberini AES-USER01'de baştan sona bir kez uygulamak en iyi provadır.
 
 **Pilot sorunsuzsa çoğaltın:** `config.ps1`'de sayıları artırın (örn. `20` ve `2`) ve 02, 03, 04'ü tekrar çalıştırın. Script'ler var olan makineleri atlar.
 

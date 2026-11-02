@@ -68,10 +68,11 @@ EC2 → **Launch instance**:
 **Katılımcı hesabını oluşturun** (yönetici PowerShell'de). Şifre en az 8 karakter olmalı; büyük harf, küçük harf, rakam ve özel karakter içermeli:
 
 ```powershell
-$pw = Read-Host "aes-user sifresi" -AsSecureString
-New-LocalUser -Name aes-user -Password $pw -PasswordNeverExpires
-Add-LocalGroupMember -Group Administrators -Member aes-user
+net user aes-user * /add /expires:never
+net localgroup Administrators aes-user /add
 ```
+
+İlk komut şifreyi iki kez sorar; yazarken ekranda bir şey görünmez. Şifre kurallara uymazsa kullanıcı oluşmaz ve ikinci komut `2221` hatası verir. (`New-LocalUser` da kullanılabilir, ancak 32-bit / x86 PowerShell'de bulunmaz.)
 
 Administrator oturumunu kapatın ve **`aes-user` ile** tekrar bağlanın (Windows App'te makine kartı → **Edit → Credentials**).
 

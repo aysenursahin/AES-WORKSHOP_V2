@@ -226,7 +226,7 @@ Base makineye dokunulmaz; ayrıca silmeniz gerekir.
 | `npm install` engellenmesi gereken paketi kuruyor | `npm config get registry` Koi gateway'ini göstermeli; gösteriyorsa paketin npm global block list'te olduğunu ve tenant'ta code package prevention'ın açık olduğunu kontrol edin |
 | SSM'de makine `Online` olmuyor | Instance'ın IAM profile'ı (`00-create-ssm-role.ps1`) ve internete çıkışı olmalı |
 | `04-install-koi.ps1` "servis bulunamadı" diyor | `config.ps1` içindeki `$KoiServicePattern`'i gerçek servis adına göre düzeltin |
-| `net localgroup ... ` → `The user name could not be found` (2221) | Kullanıcı oluşmamış; büyük ihtimalle şifre kurallara uymadı. 1. adımdaki `New-LocalUser` komutlarını kullanın. |
+| `net localgroup ... ` → `The user name could not be found` (2221) | Kullanıcı oluşmamış; büyük ihtimalle şifre kurallara uymadı. `net user aes-user * /add /expires:never` komutunu daha güçlü bir şifreyle tekrar çalıştırın. |
 | AWS girişinde **IAM user sign in** ekranı | Hesabı e-postayla açtıysanız **Sign in using root user email**'e tıklayın |
 | Kurulumda `PowerShell execution policy` adımı `Security error` | Eski script sürümünde yanlış alarmdı; ayar uygulanır. `Get-ExecutionPolicy -List`'te `LocalMachine` = `RemoteSigned` olmalı. |
 | `/koi` sayfasında sertifika hatası | Koi Root CA kurulmamış. Katılımcı Bölüm 0.3'teki `certutil -user -addstore` adımını tekrarlamalı; kontrol: `certmgr.msc` → Trusted Root Certification Authorities |

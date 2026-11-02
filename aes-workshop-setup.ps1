@@ -51,20 +51,14 @@ param(
     # Bos birakilirsa pip yonlendirmesi atlanir.
     [string]$PypiGatewayUrl = "",
 
-    # Koi Root CA dosyasinin yolu (.pem). Deployment portal > Network Integration >
-    # Establish Network Trust > Download CA. Chrome Web Store / VS Code Marketplace
-    # trafigi Koi proxy'sinden gecerken makinenin bu baglantiya guvenmesi icin gerekir.
-    # Bos birakilirsa repodaki certs\ klasorundeki .pem/.cer/.crt dosyasi kullanilir;
-    # orada da yoksa bu adim atlanir.
+    # v2: Koi Root CA ve PAC ayarini katilimcilar workshop basinda konsoldan
+    # (Settings > Deployment > Network Routing) kendileri yapar. Base makinede
+    # bu iki parametreyi BOS birakin. Yalnizca test/prova icin kullanin.
     [string]$KoiRootCaFile = "",
-
-    # Koi PAC dosyasi URL'i (deployment portal > Network Integration).
-    # Koi konsolunda "Deploy with KOI" seciliyse PAC'i Koi'nin script paketi kurar;
-    # o durumda bos birakin.
     [string]$PacUrl = "",
 
     # Lab rehberinin web surumu; masaustune kisayol olarak konur.
-    [string]$LabGuideUrl = "https://aes-workshop.onrender.com"
+    [string]$LabGuideUrl = "https://aes-workshop-v2.onrender.com"
 )
 
 # ---------------------------------------------------------------------------
@@ -327,27 +321,16 @@ if ($PypiGatewayUrl) {
 }
 
 # ---------------------------------------------------------------------------
-# C6. Marketplace trafigi: Koi Root CA ve PAC dosyasi (Bolum 1-2)
-# Kurulumlar bittikten SONRA yapilir; boylece hazirlik sirasindaki extension
-# kurulumlari Koi proxy'sinden gecmez.
+# C6. Marketplace trafigi: Koi Root CA ve PAC dosyasi
+# v2'de katilimcilar bunu Bolum 0.3'te kendileri yapar; parametre verilmezse atlanir.
 # ---------------------------------------------------------------------------
-# Parametre verilmediyse repodaki certs\ klasorundeki sertifikayi kullan
-if (-not $KoiRootCaFile) {
-    $repoCa = Get-ChildItem -Path (Join-Path $PSScriptRoot "certs") -File -ErrorAction SilentlyContinue |
-        Where-Object { @(".pem", ".cer", ".crt") -contains $_.Extension.ToLower() } | Select-Object -First 1
-    if ($repoCa) {
-        $KoiRootCaFile = $repoCa.FullName
-        Write-Host "`n==> Repodaki sertifika kullaniliyor: certs\$($repoCa.Name)" -ForegroundColor Cyan
-    }
-}
-
 if ($KoiRootCaFile) {
     Invoke-Step "Koi Root CA -> Trusted Root Certification Authorities" {
         if (-not (Test-Path $KoiRootCaFile)) { throw "CA dosyasi bulunamadi: $KoiRootCaFile" }
         Invoke-Native "certutil.exe" @("-addstore", "-f", "Root", $KoiRootCaFile)
     }
 } else {
-    Write-Host "`n==> Koi Root CA verilmedi, atlandi (Bolum 1-2 icin gerekli)." -ForegroundColor Yellow
+    Write-Host "`n==> Koi Root CA ve PAC atlandi: katilimcilar Bolum 0.3'te konsoldan kuracak." -ForegroundColor Cyan
 }
 
 if ($PacUrl) {
@@ -463,7 +446,8 @@ Write-Host @"
      (Bolum 2'de "Request Approval" gosterilecek eklentiyi KURMAYIN.)
   4. Chrome ve VS Code'u bir kez acip ilk calistirma ekranlarini kapatin.
   5. Makineyi yeniden baslatin.
-  6. KOI'YI KURMADAN AMI alin: aws\01-create-ami.ps1
+  6. Koi Root CA ve PAC ayarini YAPMAYIN (katilimcilar Bolum 0.3'te yapacak).
+  7. KOI'YI KURMADAN AMI alin: aws\01-create-ami.ps1
 "@ -ForegroundColor Yellow
 
 Stop-Transcript | Out-Null

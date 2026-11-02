@@ -1,7 +1,7 @@
 AES WORKSHOP - HAZIR KOMUTLAR
 =============================
 Komutları kopyalayıp masaüstündeki "Proje Terminali" penceresine yapıştırın.
-Lab rehberi: https://aes-workshop.onrender.com (masaüstündeki "AES Lab Rehberi" kısayolu)
+Lab rehberi: https://aes-workshop-v2.onrender.com (masaüstündeki "AES Lab Rehberi" kısayolu)
 
 
 [Bölüm 0] Makinenin hostname'i
@@ -9,6 +9,13 @@ hostname
 
 [Bölüm 0] AES servisinin çalıştığını kontrol et
 Get-Service | Where-Object { $_.DisplayName -like "*Koi*" }
+
+[Bölüm 0.3] Konsoldan indirdiğiniz Koi Root CA'yı yükleyin (Terminal (Admin) penceresinde çalıştırın)
+$ca = Get-ChildItem "$env:USERPROFILE\Downloads\*" -Include *.pem,*.crt,*.cer | Sort-Object LastWriteTime -Descending | Select-Object -First 1
+certutil -addstore -f Root $ca.FullName
+
+[Bölüm 0.3] Proxy doğrulama adresi (Chrome'u kapatıp açtıktan sonra)
+https://marketplace.visualstudio.com/koi
 
 
 [Bölüm 3] İzin verilen bir paketi kur

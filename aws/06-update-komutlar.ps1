@@ -21,7 +21,7 @@ $script = @"
 `$dest = 'C:\Users\$WorkshopUser\Desktop\komutlar.txt'
 Invoke-WebRequest -UseBasicParsing -Uri '$RepoRawBase/komutlar.txt' -OutFile `$dest
 Write-Output "Guncellendi: `$dest (`$((Get-Item `$dest).Length) byte)"
-`$guide = '$(if ($LabGuideUrl) { $LabGuideUrl } else { "https://aes-workshop.onrender.com" })'
+`$guide = '$(if ($LabGuideUrl) { $LabGuideUrl } else { "https://aes-workshop-v2.onrender.com" })'
 `$lnk = 'C:\Users\$WorkshopUser\Desktop\AES Lab Rehberi.url'
 [IO.File]::WriteAllText(`$lnk, "[InternetShortcut]``r``nURL=`$guide``r``n")
 Write-Output "Kisayol: `$lnk -> `$guide"

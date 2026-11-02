@@ -48,7 +48,7 @@ $KoiServicePattern = "*Koi*"
 $KoiMsiBucket = ""
 
 # Lab rehberinin web adresi (06-update-komutlar.ps1 masaustune kisayol koyar)
-$LabGuideUrl = "https://aes-workshop.onrender.com"
+$LabGuideUrl = "https://aes-workshop-v2.onrender.com"
 
 # Repo'nun raw adresi (06-update-komutlar.ps1 buradan ceker)
-$RepoRawBase = "https://raw.githubusercontent.com/aysenursahin/AES-WORKSHOP_V1/main"
+$RepoRawBase = "https://raw.githubusercontent.com/aysenursahin/AES-WORKSHOP_V2/main"

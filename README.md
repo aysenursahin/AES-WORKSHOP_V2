@@ -25,10 +25,10 @@ Akış kısaca şöyle: tek bir **base makine** kurulur, ondan **AMI** alınır,
 ## Lab rehberi
 
 Katılımcılara dağıtılan rehber iki biçimde:
-- **Word:** [`docs/AES Workshop Lab Rehberi v1.docx`](docs/AES%20Workshop%20Lab%20Rehberi%20v1.docx)
+- **Word:** [`docs/AES Workshop Lab Rehberi v2.docx`](docs/AES%20Workshop%20Lab%20Rehberi%20v2.docx)
 - **Web:** [`site/`](site/) klasörü. Yan menü, kopyalanabilir komutlar ve bölüm ilerleme takibi içerir; telefonda da çalışır.
 
-**Web sürümünü Render'da yayınlamak:** [Render](https://render.com) → **New → Blueprint** → bu repoyu bağlayın → **Apply**. Repodaki [`render.yaml`](render.yaml) statik siteyi `site/` klasöründen yayınlar; adres `https://aes-workshop.onrender.com` biçiminde olur (ad doluysa Render bir ek getirir). `main` dalına her gönderimde site otomatik güncellenir.
+**Web sürümünü Render'da yayınlamak:** [Render](https://render.com) → **New → Blueprint** → bu repoyu bağlayın → **Apply**. Repodaki [`render.yaml`](render.yaml) statik siteyi `site/` klasöründen yayınlar; adres `https://aes-workshop-v2.onrender.com` biçiminde olur (ad doluysa Render bir ek getirir). `main` dalına her gönderimde site otomatik güncellenir.
 
 ## Gereksinimler
 
@@ -42,8 +42,7 @@ Katılımcılara dağıtılan rehber iki biçimde:
 - Deployment Portal'dan:
   - Windows kurulum komutu: **Manual → Windows → Installed → Script Package**
   - npm ve PyPI gateway adresleri: `https://koi-npmjs-<customer_subdomain>.gateway.koi.security`, `https://koi-pypi-<customer_subdomain>.gateway.koi.security`
-  - PAC dosyası URL'i: **Network Integration**
-  - Koi Root CA: **Network Integration → Establish Network Trust → Download CA**. Bu repoda [`certs/`](certs/) altında hazır.
+- **v2 farkı:** Koi Root CA ve PAC (proxy) ayarı base makinede yapılmaz. Katılımcılar workshop başında AES konsolunda **Settings → Deployment → Network Routing** adımlarını izleyerek kendileri yapar (lab rehberi Bölüm 0.3). Katılımcıların lab makinesinden konsola girip sertifikayı indirebilmesi gerekir.
 
 ---
 
@@ -84,39 +83,39 @@ Administrator oturumunu kapatın ve **`wsuser` ile** tekrar bağlanın (Windows 
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 Set-ExecutionPolicy Bypass -Scope Process -Force
 $zip = "$env:TEMP\aes-workshop.zip"
-irm https://github.com/aysenursahin/AES-WORKSHOP_V1/archive/refs/heads/main.zip -OutFile $zip
+irm https://github.com/aysenursahin/AES-WORKSHOP_V2/archive/refs/heads/main.zip -OutFile $zip
 Expand-Archive $zip -DestinationPath "$env:TEMP\aes-workshop" -Force
-& "$env:TEMP\aes-workshop\AES-WORKSHOP_V1-main\aes-workshop-setup.ps1" `
+& "$env:TEMP\aes-workshop\AES-WORKSHOP_V2-main\aes-workshop-setup.ps1" `
     -KoiConsoleUrl  "https://<konsol-adresi>" `
     -NpmGatewayUrl  "https://koi-npmjs-<customer_subdomain>.gateway.koi.security" `
-    -PypiGatewayUrl "https://koi-pypi-<customer_subdomain>.gateway.koi.security" `
-    -PacUrl         "<PAC dosyasi URL'i>"
+    -PypiGatewayUrl "https://koi-pypi-<customer_subdomain>.gateway.koi.security"
 ```
 
 Kurulum 15–20 dakika sürer. Script:
 - Chrome, VS Code, Node.js, Python, Git, VS Code extension'ları, Claude Code ve Codex CLI'ı kurar
 - Örnek projeleri, MCP config'lerini, örnek skill'i ve sahte `.env` dosyasını oluşturur
 - npm ve pip'i Koi gateway'ine yönlendirir
-- [`certs/`](certs/) klasöründeki **Koi Root CA**'yı makinenin Trusted Root deposuna ekler (başka bir dosya için `-KoiRootCaFile "<yol>"`)
-- **PAC dosyasını** `wsuser`'ın proxy ayarlarına yazar
+- Koi Root CA ve PAC ayarına **dokunmaz** (katılımcılar Bölüm 0.3'te yapacak)
 - Masaüstüne `komutlar.txt`, **AES Konsol** ve **Proje Terminali** kısayollarını koyar
 
-> **PAC dosyası:** `-PacUrl` vermek yerine AES konsolunda **Settings → Advanced Settings → Network integration (Proxy) → Deploy with KOI** seçerseniz PAC'i Koi'nin script paketi kurar. Ancak o zaman PAC, AES kurulana kadar (5. adım) devreye girmez ve aşağıdaki `/koi` kontrolünü base makinede yapamazsınız.
 
-Sondaki kontrol listesinde her satır `[OK]` olmalı; özellikle **Koi Root CA guvenilir**, **PAC dosyasi ayarli**, **npm registry = Koi gateway** ve **pip.ini = Koi gateway**. Script güvenle tekrar çalıştırılabilir.
+Sondaki kontrol listesinde her satır `[OK]` olmalı; özellikle **npm registry = Koi gateway** ve **pip.ini = Koi gateway**. Script güvenle tekrar çalıştırılabilir.
 
 **Ardından elle:**
 
 1. **Claude Desktop** ve **Cursor**'u kurun: [claude.ai/download](https://claude.ai/download), [cursor.com/download](https://cursor.com/download). Cursor için **User Setup, x64** sürümü. İkisini de `wsuser` ile kurun.
 2. Uygulamaları (Chrome, VS Code, Cursor, Claude Desktop) bir kez açıp ilk açılış ekranlarını kapatın. Giriş ekranı çıkarsa **giriş yapmayın** (aşağıdaki uyarıya bakın).
-3. **Koi proxy'sini doğrulayın:** Chrome'u kapatıp açın ve `https://marketplace.visualstudio.com/koi` adresine gidin.
-   - Koi'nin zeplin görselli sayfası → doğru.
-   - Sertifika hatası → Koi Root CA kurulmamış.
-   - Normal marketplace sayfası → PAC uygulanmamış.
-4. **Chrome'a 3–4 popüler extension kurun.** PAC devrede olduğu için bu kurulumlar Koi'den geçer; bu, lab rehberi Bölüm 1'in provasıdır. **Request Approval** çıkan extension'ı kurmayın; adını Bölüm 2 için not edin.
-5. Makineyi yeniden başlatın.
+3. **Chrome'a 3–4 popüler extension kurun.** Lab rehberi Bölüm 2'de kullanılan **Hulu Ad Skipper | Ad Blocker [QVI]** ve **Checker Plus for Gmail**'i kurmayın.
+4. Makineyi yeniden başlatın.
+
+> **v1 base makinesini kullanıyorsanız** CA ve PAC ayarını kaldırıp AMI'yi yeniden alın (yönetici PowerShell'de, `wsuser` ile):
+> ```powershell
+> certutil -delstore Root 758A887D7DCA2EA140C561B913DA5DFB0027EA5C
+> Remove-ItemProperty "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings" -Name AutoConfigURL -ErrorAction SilentlyContinue
+> ```
 
 > **Base makineye bunları KOYMAYIN.** Base makinede ne varsa AMI ile tüm katılımcı makinelerine kopyalanır:
+> - **Koi Root CA ve PAC:** Katılımcılar Bölüm 0.3'te kendileri kuracak.
 > - **AES/Koi:** Klonlar aynı cihaz kimliğini taşıyabilir ve konsolda tek makine gibi görünür. AES 5. adımda her makineye ayrı kurulur.
 > - **Kişisel hesaplar:** Cursor, Claude Desktop, Chrome veya GitHub'da giriş yapmayın; oturumunuz tüm katılımcılara kopyalanır.
 > - **AWS anahtarları:** `aws/` script'lerini base makinede çalıştırmayın (3. adım).
@@ -128,8 +127,8 @@ Sondaki kontrol listesinde her satır `[OK]` olmalı; özellikle **Koi Root CA g
 **Seçenek A: AWS CloudShell (önerilen).** AWS konsolunda sağ üstteki **`>_`** simgesi. AWS CLI ve PowerShell hazır gelir, hesabınızla oturum açıktır; access key gerekmez. Bölgenin doğru olduğundan emin olun.
 
 ```bash
-git clone https://github.com/aysenursahin/AES-WORKSHOP_V1.git
-cd AES-WORKSHOP_V1/aws
+git clone https://github.com/aysenursahin/AES-WORKSHOP_V2.git
+cd AES-WORKSHOP_V2/aws
 cp config.example.ps1 config.ps1
 cp koi-install-command.example.ps1 koi-install-command.ps1
 nano config.ps1                     # kaydet: Ctrl+O, Enter; çık: Ctrl+X

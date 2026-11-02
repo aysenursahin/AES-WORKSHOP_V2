@@ -10,13 +10,13 @@ hostname
 [Bölüm 0] AES servisinin çalıştığını kontrol et
 Get-Service | Where-Object { $_.DisplayName -like "*Koi*" }
 
-[Bölüm 0.3] Konsoldan indirdiğiniz Koi Root CA'yı yükleyin (Terminal (Admin) penceresinde çalıştırın)
+[Bölüm 0.3] Konsoldan indirdiğiniz Koi Root CA'yı yükleyin (çıkan uyarıda Yes deyin)
 $ca = Get-ChildItem "$env:USERPROFILE\Downloads\*" -Include *.pem,*.crt,*.cer | Sort-Object LastWriteTime -Descending | Select-Object -First 1
-certutil -addstore -f Root $ca.FullName
+certutil -user -addstore -f Root $ca.FullName
 
-[Bölüm 0.3] Sertifikanın Trusted Root deposuna eklendiğini kontrol edin (aynı Terminal (Admin) penceresinde)
+[Bölüm 0.3] Sertifikanın Trusted Root deposuna eklendiğini kontrol edin (aynı terminal penceresinde)
 $t = (New-Object System.Security.Cryptography.X509Certificates.X509Certificate2 $ca.FullName).Thumbprint
-Get-ChildItem Cert:\LocalMachine\Root | Where-Object Thumbprint -eq $t
+Get-ChildItem Cert:\CurrentUser\Root | Where-Object Thumbprint -eq $t
 
 [Bölüm 0.3] Proxy doğrulama adresi (Chrome'u kapatıp açtıktan sonra)
 https://marketplace.visualstudio.com/koi

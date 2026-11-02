@@ -232,7 +232,7 @@ Base makineye dokunulmaz; ayrıca silmeniz gerekir.
 | `net localgroup ... ` → `The user name could not be found` (2221) | Kullanıcı oluşmamış; büyük ihtimalle şifre kurallara uymadı. 1. adımdaki `New-LocalUser` komutlarını kullanın. |
 | AWS girişinde **IAM user sign in** ekranı | Hesabı e-postayla açtıysanız **Sign in using root user email**'e tıklayın |
 | Kurulumda `PowerShell execution policy` adımı `Security error` | Eski script sürümünde yanlış alarmdı; ayar uygulanır. `Get-ExecutionPolicy -List`'te `LocalMachine` = `RemoteSigned` olmalı. |
-| `/koi` sayfasında sertifika hatası | Koi Root CA kurulmamış: `Get-ChildItem Cert:\LocalMachine\Root \| Where-Object Subject -like "*Koi Root CA*"` |
+| `/koi` sayfasında sertifika hatası | Koi Root CA kurulmamış. Katılımcı Bölüm 0.3'teki `certutil -user -addstore` adımını tekrarlamalı; kontrol: `certmgr.msc` → Trusted Root Certification Authorities |
 | `/koi` yerine normal marketplace sayfası | PAC uygulanmamış ya da tarayıcı yeniden başlatılmamış. Windows Ayarlar → Network & Internet → Proxy → **Use setup script** açık olmalı. |
 | Cursor / Claude Desktop giriş istiyor | Base makinede giriş yapmayın; pencereyi kapatın. Inventory için kurulu olmaları yeterli. |
 | Chrome kurulumu checksum hatası veriyor | Script Chrome için checksum kontrolünü atlıyor; güncel script'i kullandığınızdan emin olun |
